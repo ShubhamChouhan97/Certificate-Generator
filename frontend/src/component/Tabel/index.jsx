@@ -89,27 +89,31 @@ import React, { useEffect, useState } from 'react';
 import style from './style.module.css';
 import io from 'socket.io-client';
 
-const socket = io('http://localhost:5000');
+const socket = io('http://localhost:5001');
 
 function Table() {
   const [certificates, setCertificates] = useState([]);
-
+  const [count, setCount] = useState(0);
   useEffect(() => {
-    socket.on('certificate-generated', (cert) => {
+    const handleCertificateGenerated = (cert) => {
+      setCount((prev) => prev + 1);
       console.log('Certificate created:', cert);
       setCertificates((prev) => [...prev, cert]);
-    });
-
-    return () => socket.off('certificate-generated');
+    };
+  
+    socket.on('certificate-generated', handleCertificateGenerated);
+    return () => {
+      socket.off('certificate-generated', handleCertificateGenerated);
+    };
   }, []);
 
   const handleView = (path) => {
-    window.open(`http://localhost:5000${path}`, '_blank');
+    window.open(`http://localhost:5001${path}`, '_blank');
   };
 
   const handleDownload = async (path, fileName) => {
     try {
-      const response = await fetch(`http://localhost:5000${path}`);
+      const response = await fetch(`http://localhost:5001${path}`);
       const blob = await response.blob();
 
       const url = window.URL.createObjectURL(blob);
@@ -135,6 +139,7 @@ function Table() {
 
   return (
     <div className={style.main}>
+    <h2> Total Certificates : {count}</h2>
       <div className={style.tablediv}>
         <table className={style.table}>
           <thead>

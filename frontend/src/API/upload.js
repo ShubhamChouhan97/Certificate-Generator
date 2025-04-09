@@ -4,7 +4,7 @@ export const uploadFiles = async (excelFile, templateFile) => {
     formData.append('templateFile', templateFile);
   
     try {
-      const response = await fetch('http://localhost:5000/uploadfile/uploaddata', {
+      const response = await fetch('http://localhost:5001/uploadfile/uploaddata', {
         method: 'POST',
         body: formData,
       });
