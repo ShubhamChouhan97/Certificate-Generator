@@ -6,7 +6,7 @@ const app = express();
 const http = require('http');
 const socketIo = require('socket.io');
 const uploadRoutes = require('./router/uploadfile.js');
-const port = 5000;
+const port = 5001;
 app.use(cors());
 app.use(express.static('public'));
 app.use(express.json());

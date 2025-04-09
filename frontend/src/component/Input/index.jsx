@@ -9,6 +9,7 @@ function Input() {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async () => {
+    // Validate file types
     if (!excelFile || !templateFile) {
       alert("Please upload both files.");
       return;
@@ -18,7 +19,7 @@ function Input() {
 
     try {
       const result = await uploadFiles(excelFile, templateFile); // Upload
-      alert("Files uploaded successfully!");
+      // alert("Files uploaded successfully!");
       console.log(result);
     } catch (error) {
       console.error("Upload error:", error);
@@ -38,7 +39,15 @@ function Input() {
             type="file"
             accept=".xlsx, .xls"
             id="excelFile"
-            onChange={(e) => setExcelFile(e.target.files[0])}
+            onChange={(e) => 
+            {
+              if (e.target.files[0] && !e.target.files[0].name.endsWith('.xlsx') && !e.target.files[0].name.endsWith('.xls')) {
+              alert("Please upload a valid Excel file (.xlsx or .xls).");
+             }else{
+              setExcelFile(e.target.files[0])
+             }
+            }
+           }
             disabled={isLoading}
           />
         </div>
@@ -49,7 +58,15 @@ function Input() {
             type="file"
             accept=".doc, .docx"
             id="templateFile"
-            onChange={(e) => setTemplateFile(e.target.files[0])}
+            onChange={(e) => 
+            {
+              if(e.target.files[0] && !e.target.files[0].name.endsWith('.doc') && !e.target.files[0].name.endsWith('.docx')) {
+              alert("Please upload a valid Word template file (.doc or .docx).");
+              }else{
+                setTemplateFile(e.target.files[0])
+                }
+            }
+           }
             disabled={isLoading}
           />
         </div>
